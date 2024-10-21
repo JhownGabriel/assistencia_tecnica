@@ -1,5 +1,5 @@
 <?php
-
+session_start();
 include_once '../includes/dbconnect.php';
 
 $erro = '';
@@ -64,7 +64,7 @@ $result = $mysqli->query("SELECT os.*, c.nome_cli, u.nome_usu FROM Ordem_servico
     <?php endif; ?>
 
     <!-- Formulário para adicionar ou editar ordem de serviço -->
-    <form action="ordem_servico.php" method="POST">
+    <form action="itens_os.php" method="POST">
         <input type="hidden" name="id_ordem" value="<?= isset($_POST['id_ordem']) ? $_POST['id_ordem'] : -1 ?>">
 
         <input id="data" type="hidden" name="data_ordem_servico" value="<?= date('Y-m-d H:i:s') ?>" required>
@@ -86,7 +86,7 @@ $result = $mysqli->query("SELECT os.*, c.nome_cli, u.nome_usu FROM Ordem_servico
         </select><br><br>
 
         <label for="id_usu">Usuário:</label><br>
-            <input name="id_usu" value="<?php echo isset($_SESSION['nome_usu']) ? $_SESSION['nome_usu'] : ''; ?>" disabled><br><br>
+            <input name="id_usu" value="<?php echo isset($_SESSION['nome']) ? $_SESSION['nome'] : ''; ?>" disabled><br><br>
 
         <button
             type="submit"><?= (isset($_POST['id_ordem']) && $_POST['id_ordem'] != -1) ? 'Salvar' : 'Cadastrar' ?></button>

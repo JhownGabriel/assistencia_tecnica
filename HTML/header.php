@@ -80,10 +80,10 @@
         </label>
         <ul>
         <?php  
-            if ($nome == "NENHUM"){
+            if ($nome == 'NENHUM'){
                 echo '<li><a id="navbar" class="active" href="index.php">Home</a></li>';
             }else{
-                echo '<li class="account" id="login"><a href="login.php" id="login-account">Olá, ' . htmlspecialchars($nome) . '</a></li>';
+                echo '<li><a class="active" id="navbar" href="login.php">Olá, ' . htmlspecialchars($nome['nome_usu']) . '</a></li>';
             } 
         ?>
             <li><a class="active" href="produtos.php">usados</a></li>

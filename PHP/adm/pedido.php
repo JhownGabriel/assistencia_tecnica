@@ -1,5 +1,5 @@
 <?php
-
+session_start();
 include_once '../includes/dbconnect.php';
 
 $erro = '';
@@ -80,7 +80,7 @@ $result = $mysqli->query("SELECT p.*, c.nome_cli, u.nome_usu FROM Pedido p LEFT 
     <?php endif; ?>
 
     <!-- Formulário para adicionar ou editar pedido -->
-    <form action="pedido.php" method="POST">
+    <form action="itens_pedido.php" method="POST">
         <input type="hidden" name="id_ped" value="<?= isset($_POST['id_ped']) ? $_POST['id_ped'] : '' ?>">
 
         <input type="hidden" name="data_ped" value="<?= date('Y-m-d H:i:s') ?>" required>
@@ -108,7 +108,7 @@ $result = $mysqli->query("SELECT p.*, c.nome_cli, u.nome_usu FROM Pedido p LEFT 
         </select><br><br>
 
         <label for="id_usu">Usuário:</label><br>
-        <input name="id_usu" value="<?php echo isset($_SESSION['nome']) ? $_SESSION['nome'] : ''; ?>" disabled><br><br>
+        <input name="id_usu" type="text" value="<?php echo isset($_SESSION['nome']) ? $_SESSION['nome'] : ''; ?>" disabled><br><br>
 
         <button type="submit"><?= (isset($_POST['id_ped'])) ? 'Salvar' : 'Cadastrar' ?></button>
     </form>

@@ -79,7 +79,7 @@ $result = $mysqli->query("SELECT c.*, f.nome_for, u.nome_usu FROM Compra c LEFT 
     <?php endif; ?>
 
     <!-- Formulário para adicionar ou editar compra -->
-    <form action="compra.php" method="POST">
+    <form action="itens_compra.php" method="POST">
         <input type="hidden" name="id_compra" value="<?= isset($_GET['id_compra']) ? $_GET['id_compra'] : -1 ?>">
 
         <!-- Campo para a data da compra -->
@@ -142,7 +142,7 @@ $result = $mysqli->query("SELECT c.*, f.nome_for, u.nome_usu FROM Compra c LEFT 
 
         </script>
 
-        <label for="data_entrega_efetiva">Data de Entrega Efetiva (opcional):</label><br>
+        <label for="data_entrega_efetiva">Data de Entrega Efetiva:</label><br>
         <input type="date" name="data_entrega_efetiva"
             value="<?= isset($_POST['data_entrega_efetiva']) ? htmlspecialchars($_POST['data_entrega_efetiva']) : '' ?>"><br><br>
 

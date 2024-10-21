@@ -79,12 +79,11 @@
                 echo '<li class="account" id="login"><a class="active" href="login.php" id="login-account">Olá, ' . htmlspecialchars($nome) . '</a></li>';
             } 
         ?>
-            <li><a class="active" href="index.php">HOME</a></li>
             <li><a class="active" href="cliente.php">Cliente</a></li>
             <li><a class="active" href="compra.php">Compra</a></li>
             <li><a class="active" href="fornecedor.php">Fornecedor</a></li>
-            <li><a class="active" href="ordem_servico.php">Ordem Serviço</a></li>
             <li><a class="active" href="pedido.php">Pedido</a></li>
+            <li><a class="active" href="ordem_servico.php">Ordem de Serviço</a></li>
             <li><a class="active" href="produto.php">Produto</a></li>
             <li><a class="active" href="servico.php">Serviço</a></li>
         </ul>
