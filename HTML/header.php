@@ -1,4 +1,9 @@
 
+<?php
+// Verifica se o usuário está logado
+$logado = isset($_SESSION['logado']) && $_SESSION['logado'];  // Se a variável 'logado' estiver definida e for verdadeira
+$nome = isset($_SESSION['nome_usu']) ? $_SESSION['nome_usu'] : 'NENHUM';  // Nome do usuário ou 'NENHUM' se não estiver logado
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -20,23 +25,25 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-            const isLoggedIn = <?php echo isset($_SESSION['logado']) && $_SESSION['logado'] ? 'true' : 'false'; ?>;
+            // Verifica se o usuário está logado com base na variável PHP
+            const isLoggedIn = <?php echo $logado ? 'true' : 'false'; ?>;
+            
+            // Se o usuário estiver logado, remove os botões de login e criar conta
             if (isLoggedIn) {
-                const login = document.getElementById("login");
+                const criarConta = document.getElementById("criar_conta");
+                if (criarConta) {
+                    criarConta.remove(); // Remove o botão de criar conta e login
+                }
+            } else {
+                // Se o usuário não estiver logado, remove o botão de logout e admin
                 const logout = document.getElementById("logout");
                 const adminCrud = document.getElementById("adminCrud");
-                const register = document.getElementById("register");
-
-                if (login) {
-                    login.remove();
-
+                if (logout) {
+                    logout.remove();
                 }
-                
-            }else{
-                logout.remove();
-                console.log("remove admin");
-                adminCrud.remove();
-                register.remove();
+                if (adminCrud) {
+                    adminCrud.remove();
+                }
             }
         });
     </script>
@@ -60,6 +67,7 @@
         <nav class="navbar d-flex justify-content-between align-items-center px-3">
             <a class="navbar-brand" href="index.php">
                 <img src="../images/casaicon.png" class="d-inline-block align-top" alt="">
+                <img class="d-inline-block align-top" id="logoheader" src="../images/logoazul.png" alt="">
             </a>
             <div class="d-flex align-items-center">
                 <div id="criar_conta" class="me-3">

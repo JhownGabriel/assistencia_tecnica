@@ -84,15 +84,15 @@ $result = $mysqli->query("SELECT ic.*, p.nome_prod FROM Items_compra ic LEFT JOI
 
         <label for="id_compra">ID da Compra:</label><br>
         <input type="number" name="id_compra" min="1"
-            value="<?= isset($_POST['id_compra']) ? htmlspecialchars($_POST['id_compra']) : '' ?>" required><br><br>
+            value="<?= isset($_GET['id_compra']) ? htmlspecialchars($_GET['id_compra']) : '' ?>" readonly><br><br>
 
-        <label for="id_prod">ID do Produto:</label><br>
-        <input type="number" name="id_prod" min="1"
-            value="<?= isset($_POST['id_prod']) ? htmlspecialchars($_POST['id_prod']) : '' ?>" required><br><br>
+        <label for="nome_prod">Nome do Produto:</label><br>
+        <input type="text" name="nome_prod"
+            value="<?= isset($_GET['nome_prod']) ? htmlspecialchars($_GET['nome_prod']) : '' ?>" required><br><br>
 
             <label for="preco_">Preço:</label><br>
         <input type="text" id="preco" name="preco" placeholder="R$ 0,00"
-            value="<?= isset($_POST['preco']) ? htmlspecialchars($_POST['preco']) : '' ?>"
+            value="<?= isset($_GET['preco']) ? htmlspecialchars($_GET['preco']) : '' ?>"
             required><br><br>
 
         <script>
@@ -126,7 +126,8 @@ $result = $mysqli->query("SELECT ic.*, p.nome_prod FROM Items_compra ic LEFT JOI
 
         </script>
 
-        <button type="submit"><?= (isset($_POST['id_item'])) ? 'Salvar' : 'Cadastrar' ?></button>
+        
+        <a href="itens_compra.php?id_compra=<?= $compra['id_compra'] ?>&nome_prod=<?= urlencode($compra['nome_prod']) ?>">Adicionar Itens</a>
     </form>
 
     <hr>
