@@ -96,7 +96,7 @@ if (!$fornecedores) {
         <input type="email" name="email_for"
             value="<?= isset($_POST['email_for']) ? htmlspecialchars($_POST['email_for']) : '' ?>" required><br><br>
 
-        <label for="documento_for">Documento:</label><br>
+        <label for="documento_for">Documento: (CNPJ)</label><br>
         <input type="text" name="documento_for" id="documento_for" placeholder="99.999.999/0001-99" maxlength="18"
             value="<?= isset($_POST['documento_for']) ? htmlspecialchars($_POST['documento_for']) : '' ?>"
             required><br><br>

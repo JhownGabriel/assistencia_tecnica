@@ -82,7 +82,7 @@ $result = $mysqli->query("SELECT ic.*, p.nome_prod FROM Items_compra ic LEFT JOI
     <form action="itens_compra.php" method="POST">
         <input type="hidden" name="id_item" value="<?= isset($_POST['id_item']) ? $_POST['id_item'] : '' ?>">
 
-        <label for="id_compra">ID da Compra:</label><br>
+        <label for="id_compra">Codigo da Compra:</label><br>
         <input type="number" name="id_compra" min="1"
             value="<?= isset($_GET['id_compra']) ? htmlspecialchars($_GET['id_compra']) : '' ?>" readonly><br><br>
 

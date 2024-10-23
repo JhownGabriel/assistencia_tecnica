@@ -7,17 +7,17 @@ $success = '';
 
 // Inserir/Atualizar Item de Pedido
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    if (isset($_POST["id_ped"], $_POST["id_prod"], $_POST["preco_itens_ped"])) {
-        if (empty($_POST["id_ped"]) || empty($_POST["id_prod"]) || empty($_POST["preco_itens_ped"])) {
+    if (isset($_POST["id_ped"], $_POST["id_prod"], $_POST["preco_vendido"])) {
+        if (empty($_POST["id_ped"]) || empty($_POST["id_prod"]) || empty($_POST["preco_vendido"])) {
             $erro = "Os campos Pedido, Produto e Preço são obrigatórios.";
         } else {
             $id_ped = $_POST["id_ped"];
             $id_prod = $_POST["id_prod"];
-            $preco_itens_ped = $_POST["preco_itens_ped"];
+            $preco_itens_ped = $_POST["preco_vendido"];
             $id_itens_ped = isset($_POST["id_itens_ped"]) ? $_POST["id_itens_ped"] : null;
 
             if ($id_itens_ped === null) { // Inserir novo item de pedido
-                $stmt = $mysqli->prepare("INSERT INTO Itens_Pedido (id_ped, id_prod, preco_itens_ped) VALUES (?, ?, ?)");
+                $stmt = $mysqli->prepare("INSERT INTO Itens_Pedido (id_ped, id_prod, preco_vendido) VALUES (?, ?, ?)");
                 $stmt->bind_param("iis", $id_ped, $id_prod, $preco_itens_ped);
 
                 if ($stmt->execute()) {
@@ -26,7 +26,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $erro = "Erro ao registrar item de pedido: " . $stmt->error;
                 }
             } else { // Atualizar item de pedido existente
-                $stmt = $mysqli->prepare("UPDATE items_pedido SET preco_itens_ped = ? WHERE id_ped = ? AND id_prod = ?");
+                $stmt = $mysqli->prepare("UPDATE items_pedido SET preco_vendido = ? WHERE id_ped = ? AND id_prod = ?");
                 $stmt->bind_param("dii", $preco_itens_ped, $id_ped, $id_prod);
 
                 if ($stmt->execute()) {
@@ -86,7 +86,7 @@ $result = $mysqli->query("SELECT ip.*, p.nome_prod, ped.data_ped FROM items_pedi
             $pedidos = $mysqli->query("SELECT id_ped, data_ped FROM Pedido");
             while ($pedido = $pedidos->fetch_assoc()) {
                 $selected = (isset($_POST['id_ped']) && $_POST['id_ped'] == $pedido['id_ped']) ? 'selected' : '';
-                echo "<option value='{$pedido['id_ped']}' $selected>{$pedido['data_ped']}</option>";
+                echo "<option value='{$pedido['id_ped']}' $selected>{$pedido['id_ped']}</option>";
             }
             ?>
         </select><br><br>
@@ -106,7 +106,7 @@ $result = $mysqli->query("SELECT ip.*, p.nome_prod, ped.data_ped FROM items_pedi
 
         <label for="preco_itens_ped">Preço:</label><br>
         <input type="text" name="preco_itens_ped"
-            value="<?= isset($_POST['preco_itens_ped']) ? htmlspecialchars($_POST['preco_itens_ped']) : '' ?>"
+            value="<?= isset($_POST['preco_vendido']) ? htmlspecialchars($_POST['preco_vendido']) : '' ?>"
             required><br><br>
 
         <button type="submit"><?= (isset($_POST['id_itens_ped'])) ? 'Salvar' : 'Cadastrar' ?></button>
@@ -134,7 +134,7 @@ $result = $mysqli->query("SELECT ip.*, p.nome_prod, ped.data_ped FROM items_pedi
                     <td><?= htmlspecialchars($item['id_prod']) ?></td>
                     <td><?= htmlspecialchars($item['nome_prod']) ?></td>
                     <td><?= htmlspecialchars($item['data_ped']) ?></td>
-                    <td><?= htmlspecialchars($item['preco_itens_ped']) ?></td>
+                    <td><?= htmlspecialchars($item['preco_vendido']) ?></td>
                     <td>
                         <a href="itens_pedido.php?id_ped=<?= $item['id_ped'] ?>&id_prod=<?= $item['id_prod'] ?>"onclick="return confirm('Tem certeza que deseja remover este item de pedido?')">Remover</a>
                     </td>
