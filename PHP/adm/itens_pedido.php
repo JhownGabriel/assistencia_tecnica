@@ -4,6 +4,16 @@ include_once '../includes/dbconnect.php';
 
 $erro = '';
 $success = '';
+$id_pedido_proxima = 1;
+
+// Consulta para obter a última `id_ordem`
+$result = $mysqli->query("SELECT MAX(id_ped) as ultima_ordem FROM items_pedido");
+if ($result) {
+    $row = $result->fetch_assoc();
+    if ($row['ultima_ordem'] !== null) {
+        $id_pedido_proxima = (int)$row['ultima_ordem'] + 1;
+    }
+}
 
 // Inserir/Atualizar Item de Pedido
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -79,17 +89,9 @@ $result = $mysqli->query("SELECT ip.*, p.nome_prod, ped.data_ped FROM items_pedi
             value="<?= isset($_POST['id_itens_ped']) ? $_POST['id_itens_ped'] : '' ?>">
 
         <label for="id_ped">Pedido:</label><br>
-        <select name="id_ped" required>
-            <option value="">Selecione um pedido</option>
-            <?php
-            // Listar pedidos para o dropdown
-            $pedidos = $mysqli->query("SELECT id_ped, data_ped FROM Pedido");
-            while ($pedido = $pedidos->fetch_assoc()) {
-                $selected = (isset($_POST['id_ped']) && $_POST['id_ped'] == $pedido['id_ped']) ? 'selected' : '';
-                echo "<option value='{$pedido['id_ped']}' $selected>{$pedido['id_ped']}</option>";
-            }
-            ?>
-        </select><br><br>
+        <input type="text" name="id_ped"
+                value="<?= isset($_POST['id_ped']) ? htmlspecialchars($_POST['id_ped']) : '' ?>"
+                required readonly><br><br>
 
         <label for="id_prod">Produto:</label><br>
         <select name="id_prod" required>
