@@ -14,6 +14,9 @@ include_once '../PHP/includes/dbconnect.php';
                         <img src="../images/carro ok 1.jpg" class="d-block w-100" alt="..." id="carroimg">
                     </div>
                     <div class="carousel-item">
+                        <img src="../images/tela.png" class="d-block w-100" alt="...">
+                    </div>
+                    <div class="carousel-item">
                         <img src="../images/maquina de lavar 1.jpg" class="d-block w-100" alt="...">
                     </div>
                     <div class="carousel-item">
@@ -38,30 +41,8 @@ include_once '../PHP/includes/dbconnect.php';
                     e microondas há 12 anos.
                 </h2>
             </div>
-            <div id="quemsomos">
-                <h1>Meu trabalho</h1>
-                <p>Tudo começou quando Luiz ficou desempregado e, em um momento difícil, a máquina de lavar
-                    roupa quebrou.
-                    Sem dinheiro para consertá-la, ele mesmo decidiu tentar o reparo. Surpreendentemente, conseguiu arrumar
-                    a máquina com sucesso, e todas as vezes que quebrava ele mesmo o arrumava.
-                    Maria, sua esposa, viu o potencial de Luiz e quis divulgar o serviço dele, nas redes sociais mas ele não
-                    queria,
-                    mas ela estava Determinada a ajudar, Maria anunciou o serviço de reparo de máquinas de lavar roupa sem
-                    ele saber.
-                    Desde então, várias pessoas começaram a procurar Luiz para consertar suas máquinas, e surgiu também a
-                    oportunidade
-                    de concertar e pequenos reparos em microondas e assim nasceu o nosso negócio.
-                    Hoje, oferecemos serviços de reparo com o mesmo cuidado e dedicação com que Luiz consertou sua própria
-                    máquina
-                    há 12 anos atrás.
-                    Acreditamos que cada reparo é uma oportunidade de fazer a diferença na vida das pessoas, ajudando a
-                    resolver
-                    problemas do dia a dia com eficiência e confiança. <img src="../images/fadeout.png" alt="aguas de lindoia" width="">
-                    <br>Aguas de lindoia - SP</p>
-                    
-            </div>
         </div>
     </main>
-    <?php
-        require_once 'footer.php';
-    ?>
+<?php
+    require_once 'footer.php';
+?>

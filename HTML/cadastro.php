@@ -127,6 +127,7 @@ if (isset($mysqli)) {
                 <label for="uf">UF</label><br>
                 <select name="uf" required>
                     <option value="">SELECIONE</option>
+                    <option value="SP">SP</option>
                     <option value="AC">AC</option>
                     <option value="AL">AL</option>
                     <option value="AP">AP</option>
@@ -151,7 +152,6 @@ if (isset($mysqli)) {
                     <option value="RO">RO</option>
                     <option value="RR">RR</option>
                     <option value="SC">SC</option>
-                    <option value="SP">SP</option>
                     <option value="SE">SE</option>
                     <option value="TO">TO</option>
                 </select><br><br>

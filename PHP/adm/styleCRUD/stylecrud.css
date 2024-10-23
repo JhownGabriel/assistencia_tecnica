@@ -35,3 +35,15 @@ tr td {
     color: #ffffff;
     padding: 5px;
 }
+.table-primary {
+    background-color: #007bff; /* Azul */
+    color: white; /* Texto branco */
+}
+
+.table-secondary {
+    background-color: #f8f9fa; /* Cinza claro */
+}
+
+.table-secondary td {
+    color: #212529; /* Texto cinza escuro */
+}

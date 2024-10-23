@@ -12,20 +12,21 @@ if ($mysqli->connect_errno) {
 
 // Inserir/Atualizar Pedido
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    if (isset($_POST["data_ped"], $_POST["endereco_entrega"], $_POST["data_entrega_ped"], $_POST["id_cli"], $_SESSION["id"])) {
-        if (empty($_POST["data_ped"]) || empty($_POST["endereco_entrega"]) || empty($_POST["data_entrega_ped"]) || empty($_POST["id_cli"]) || empty($_SESSION["id"])) {
+    if (isset($_POST["endereco_entrega"], $_POST["data_entrega_ped"], $_POST["id_cli"], $_SESSION["id"])) {
+        if (empty($_POST["endereco_entrega"]) || empty($_POST["data_entrega_ped"]) || empty($_POST["id_cli"]) || empty($_SESSION["id"])) {
             $erro = "Todos os campos são obrigatórios.";
         } else {
-            $data_ped = $_POST["data_ped"];
             $endereco_entrega = $_POST["endereco_entrega"];
             $data_entrega_ped = $_POST["data_entrega_ped"];
             $id_cli = $_POST["id_cli"];
             $id_usu = $_SESSION["id"];
             $id_ped = isset($_POST["id_ped"]) ? $_POST["id_ped"] : null;
+            $valor_total = isset($_POST["valor_total"]) ? $_POST["valor_total"] : 0; // Novo campo
+            $metodo_pagamento = isset($_POST["metodo_pagamento"]) ? $_POST["metodo_pagamento"] : ''; // Novo campo
 
             if ($id_ped === null) { // Inserir novo pedido
-                $stmt = $mysqli->prepare("INSERT INTO Pedido (data_ped, endereco_entrega, data_entrega_ped, id_cli, id_usu) VALUES (?, ?, ?, ?, ?)");
-                $stmt->bind_param("ssiii", $data_ped, $endereco_entrega, $data_entrega_ped, $id_cli, $id_usu);
+                $stmt = $mysqli->prepare("INSERT INTO Pedido (endereco_entrega, data_entrega_ped, id_cli, id_usu, valor_total, metodo_pagamento) VALUES (?, ?, ?, ?, ?, ?)");
+                $stmt->bind_param("ssiiis", $endereco_entrega, $data_entrega_ped, $id_cli, $id_usu, $valor_total, $metodo_pagamento);
 
                 if ($stmt->execute()) {
                     $success = "Pedido registrado com sucesso.";
@@ -33,8 +34,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $erro = "Erro ao registrar pedido: " . $stmt->error;
                 }
             } else { // Atualizar pedido existente
-                $stmt = $mysqli->prepare("UPDATE Pedido SET data_ped = ?, endereco_entrega = ?, data_entrega_ped = ?, id_cli = ?, id_usu = ? WHERE id_ped = ?");
-                $stmt->bind_param("ssiiii", $data_ped, $endereco_entrega, $data_entrega_ped, $id_cli, $id_usu, $id_ped);
+                $stmt = $mysqli->prepare("UPDATE Pedido SET endereco_entrega = ?, data_entrega_ped = ?, id_cli = ?, id_usu = ?, valor_total = ?, metodo_pagamento = ? WHERE id_ped = ?");
+                $stmt->bind_param("ssiiisi", $endereco_entrega, $data_entrega_ped, $id_cli, $id_usu, $valor_total, $metodo_pagamento, $id_ped);
 
                 if ($stmt->execute()) {
                     $success = "Pedido atualizado com sucesso.";
@@ -66,6 +67,7 @@ $result = $mysqli->query("SELECT p.*, c.nome_cli, u.nome_usu FROM Pedido p LEFT 
 
 ?>
 
+
 <?php include_once 'headerCRUD.php' ?>
 <link rel="stylesheet" href="styleCRUD/stylecrud.css" type="text/css">
 <body>
@@ -80,10 +82,8 @@ $result = $mysqli->query("SELECT p.*, c.nome_cli, u.nome_usu FROM Pedido p LEFT 
     <?php endif; ?>
 
     <!-- Formulário para adicionar ou editar pedido -->
-    <form action="itens_pedido.php" method="POST">
+    <form action="itens_pedido.php" method="POST" class="form-pedido">
         <input type="hidden" name="id_ped" value="<?= isset($_POST['id_ped']) ? $_POST['id_ped'] : '' ?>">
-
-        <input type="hidden" name="data_ped" value="<?= date('Y-m-d H:i:s') ?>" required>
 
         <label for="endereco_entrega">Endereço de Entrega:</label><br>
         <input type="text" name="endereco_entrega"
@@ -92,7 +92,7 @@ $result = $mysqli->query("SELECT p.*, c.nome_cli, u.nome_usu FROM Pedido p LEFT 
 
         <label for="data_entrega_ped">Data de Entrega:</label><br>
         <input type="date" name="data_entrega_ped"
-            value="<?= isset($_POST['data_entrega_ped']) ? htmlspecialchars($_POST['data_entrega_ped']) : '' ?>"><br><br>
+            value="<?= isset($_POST['data_entrega_ped']) ? htmlspecialchars($_POST['data_entrega_ped']) : '' ?>" required><br><br>
 
         <label for="id_cli">Cliente:</label><br>
         <select name="id_cli" required>
@@ -107,6 +107,18 @@ $result = $mysqli->query("SELECT p.*, c.nome_cli, u.nome_usu FROM Pedido p LEFT 
             ?>
         </select><br><br>
 
+        <label for="valor_total">Valor Total:</label><br>
+        <input type="text" name="valor_total" placeholder="R$ 0,00" required><br><br>
+
+        <label for="metodo_pagamento">Método de Pagamento:</label><br>
+        <select name="metodo_pagamento" required>
+            <option value="">Selecione um método</option>
+            <option value="cartao_credito">Cartão de Crédito</option>
+            <option value="cartao_debito">Cartão de Débito</option>
+            <option value="dinheiro">Dinheiro</option>
+            <option value="transferencia">Transferência</option>
+        </select><br><br>
+
         <label for="id_usu">Usuário:</label><br>
         <input name="id_usu" type="text" value="<?php echo isset($_SESSION['nome']) ? $_SESSION['nome'] : ''; ?>" disabled><br><br>
 
@@ -115,11 +127,12 @@ $result = $mysqli->query("SELECT p.*, c.nome_cli, u.nome_usu FROM Pedido p LEFT 
 
     <hr>
 
-    <!-- Exibição dos pedidos -->
-    <h2>Lista de Pedidos</h2>
-    <table border="1">
+  <!-- Exibição dos pedidos -->
+<h2>Lista de Pedidos</h2>
+<div class="table-responsive">
+    <table class="table">
         <thead>
-            <tr>
+            <tr class="table-primary">
                 <th>ID</th>
                 <th>Data do Pedido</th>
                 <th>Endereço de Entrega</th>
@@ -132,7 +145,7 @@ $result = $mysqli->query("SELECT p.*, c.nome_cli, u.nome_usu FROM Pedido p LEFT 
         <tbody>
             <?php if ($result && $result->num_rows > 0): ?>
                 <?php while ($pedido = $result->fetch_assoc()): ?>
-                    <tr>
+                    <tr class="table-secondary">
                         <td><?= htmlspecialchars($pedido['id_ped']) ?></td>
                         <td><?= htmlspecialchars($pedido['data_ped']) ?></td>
                         <td><?= htmlspecialchars($pedido['endereco_entrega']) ?></td>
@@ -140,17 +153,18 @@ $result = $mysqli->query("SELECT p.*, c.nome_cli, u.nome_usu FROM Pedido p LEFT 
                         <td><?= htmlspecialchars($pedido['nome_cli']) ?></td>
                         <td><?= htmlspecialchars($pedido['nome_usu']) ?></td>
                         <td>
-                            <a href="pedido.php?id_ped=<?= $pedido['id_ped'] ?>" onclick="return confirm('Tem certeza que deseja remover este pedido?')">Remover</a>
+                            <a href="itens_pedido.php?id_ped=<?= $pedido['id_ped'] ?>" onclick="return confirm('Tem certeza que deseja remover este pedido?')" class="btn btn-danger btn-sm">Remover</a>
                         </td>
                     </tr>
                 <?php endwhile; ?>
             <?php else: ?>
                 <tr>
-                    <td colspan="7">Nenhum pedido encontrado.</td>
+                    <td colspan="7" class="text-center">Nenhum pedido encontrado.</td>
                 </tr>
             <?php endif; ?>
         </tbody>
     </table>
-</body>
+</div>
 
+</body>
 </html>

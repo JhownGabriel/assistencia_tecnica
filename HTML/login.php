@@ -77,9 +77,9 @@ session_start();
                 <label for="password">senha</label><br>
                 <input type="password" name="password" id="password"><br>
                 
-                <input type="checkbox" name="" id=""><p>manter logado</p>
+               
                 <button id="confirma" type="submit" value="logar" >Logando</button>
-                <p id="senharecovery">esqueci a senha</p>
+              
             </form>
         </div>
     </main>

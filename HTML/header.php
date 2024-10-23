@@ -58,18 +58,20 @@
 <body>
     <header>
         <nav class="navbar d-flex justify-content-between align-items-center px-3">
-            <a class="navbar-brand" href="index.php">
-                <img src="../images/casaicon.png" class="d-inline-block align-top" alt="">
-            </a>
             <div class="d-flex align-items-center">
-                <div id="criar_conta" class="me-3">
-                    <li class="btn btn-warning mb-0"><a href="login.php">login</a></li>
-                    <li class="btn btn-warning mb-0"><a href="cadastro.php" id="login-account">Criar Conta</a></li>
-                    <img src="../images/login.png" alt="conta" id="conta_foto" class="ms-3">
-                </div>
+                <img src="../images/logoazul.png" class="d-inline-block align-top" alt="Logo" />
+                <a class="navbar-brand" href="index.php">
+                    <img src="../images/casaicon.png" class="d-inline-block align-top ms-2" alt="Home" />
+                </a>
+            </div>
+            <div id="criar_conta" class="d-flex align-items-center">
+                <li class="btn btn-warning mb-0"><a href="login.php">Login</a></li>
+                <li class="btn btn-warning mb-0"><a href="cadastro.php" id="login-account">Criar Conta</a></li>
+                <img src="../images/login.png" alt="Conta" id="conta_foto" class="ms-3" />
             </div>
         </nav>
     </header>
+</body>
     <?php
         $nome = isset($_SESSION['nome_usu']) ? $_SESSION['nome_usu'] : 'NENHUM';  //definindo o nome do usuario em caso de nulo
     ?>
