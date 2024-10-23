@@ -58,7 +58,6 @@ include_once '../PHP/includes/dbconnect.php';
                     resolver
                     problemas do dia a dia com eficiência e confiança. <img src="../images/fadeout.png" alt="aguas de lindoia" width="">
                     <br>Aguas de lindoia - SP</p>
-                    
             </div>
         </div>
     </main>
