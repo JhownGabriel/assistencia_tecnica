@@ -41,8 +41,9 @@ include_once '../PHP/includes/dbconnect.php';
                     e microondas há 12 anos.
                 </h2>
             </div>
+            
         </div>
     </main>
-<?php
-    require_once 'footer.php';
-?>
+    <?php
+        require_once 'footer.php';
+    ?>

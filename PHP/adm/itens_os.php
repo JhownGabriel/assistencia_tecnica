@@ -5,6 +5,15 @@ include_once '../includes/dbconnect.php';
 $erro = '';
 $success = '';
 
+// Consulta para obter a última `id_ordem`
+$result = $mysqli->query("SELECT MAX(id_ordem) as ultima_ordem FROM Items_os");
+if ($result) {
+    $row = $result->fetch_assoc();
+    if ($row['ultima_ordem'] !== null) {
+        $id_ordem_os = (int)$row['ultima_ordem'] + 1;
+    }
+}
+
 // Inserir/Atualizar Item de Ordem de Serviço
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST["id_ordem"], $_POST["id_serv"], $_POST["preco_items_os"])) {
@@ -78,19 +87,8 @@ $result = $mysqli->query("SELECT io.*, s.nome_serv FROM Items_os io LEFT JOIN Se
             value="<?= isset($_POST['id_items_os']) ? $_POST['id_items_os'] : -1 ?>">
 
         <label for="id_ordem">Ordem de Serviço:</label><br>
-        <select name="id_ordem" required>
-            <option value="">Selecione uma ordem de serviço</option>
-            <?php
-            // Listar ordens de serviço para o dropdown
-            $ordens = $mysqli->query("SELECT id_ordem FROM Ordem_Servico");
-            while ($ordem = $ordens->fetch_assoc()) {
-                // Verificar se o id_ordem vindo do POST corresponde ao id_ordem do banco
-                $selected = (isset($_POST['id_ordem']) && $_POST['id_ordem'] == $ordem['id_ordem']) ? 'selected' : '';
-                echo "<option value='{$ordem['id_ordem']}' $selected>{$ordem['id_ordem']}</option>";
-            }
-            ?>
-        </select><br><br>
-
+        <input type="text" name="id_ordem"
+            value="<?php echo htmlspecialchars($id_ordem_os); ?>" readonly required><br><br>
 
         <label for="id_serv">Serviço:</label><br>
         <select name="id_serv" required>
@@ -108,9 +106,39 @@ $result = $mysqli->query("SELECT io.*, s.nome_serv FROM Items_os io LEFT JOIN Se
 
 
         <label for="preco_items_os">Preço:</label><br>
-        <input type="number" step="0.01" name="preco_items_os"
+        <input type="text" step="0.01" name="preco_items_os"
             value="<?= isset($_POST['preco_items_os']) ? htmlspecialchars($_POST['preco_items_os']) : '' ?>"
             required><br><br>
+
+            <script>
+            document.getElementById('preco_itens_os').addEventListener('input', function (e) {
+                // Remove qualquer caractere não numérico
+                let value = e.target.value.replace(/[^0-9]/g, '');
+
+                // Se o valor estiver vazio, não faz nada
+                if (value === '') {
+                    e.target.value = '';
+                    return;
+                }
+
+                // Define a parte decimal (centavos)
+                let decimalPart = value.slice(-2).padStart(2, '0');
+                // Define a parte inteira (reais)
+                let integerPart = value.slice(0, -2);
+
+                // Remove zeros à esquerda da parte inteira
+                integerPart = integerPart.replace(/^0+/, '') || '0'; // Se estiver vazio, torna-se '0'
+
+                // Adiciona separador de milhar
+                integerPart = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+
+                // Formata o valor final
+                let formattedValue = integerPart + ',' + decimalPart;
+
+                // Define o valor formatado no campo
+                e.target.value = 'R$ ' + formattedValue;
+            });
+        </script>
 
         <button
             type="submit"><?= (isset($_POST['id_ordem']) && $_POST['id_ordem'] != -1) ? 'Salvar' : 'Cadastrar' ?>
@@ -132,7 +160,6 @@ $result = $mysqli->query("SELECT io.*, s.nome_serv FROM Items_os io LEFT JOIN Se
             </tr>
         </thead>
         <tbody>
-        <?php if ($result->num_rows > 0): ?>
             <?php while ($item = $result->fetch_assoc()): ?>
                 <tr>
                     <td><?= htmlspecialchars($item['id_ordem']) ?></td>
@@ -145,11 +172,6 @@ $result = $mysqli->query("SELECT io.*, s.nome_serv FROM Items_os io LEFT JOIN Se
                     </td>
                 </tr>
             <?php endwhile; ?>
-        <?php else: ?>
-            <tr>
-                <td colspan="4">Nenhum item encontrado.</td>
-            </tr>
-        <?php endif; ?>
         </tbody>
     </table>
 

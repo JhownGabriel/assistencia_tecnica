@@ -132,7 +132,7 @@ $result = $mysqli->query("SELECT p.*, c.nome_cli, u.nome_usu FROM Pedido p LEFT 
 <div class="table-responsive">
     <table class="table">
         <thead>
-            <tr class="table-primary">
+            <tr>
                 <th>ID</th>
                 <th>Data do Pedido</th>
                 <th>Endereço de Entrega</th>

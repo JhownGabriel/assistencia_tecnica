@@ -5,6 +5,24 @@ include_once '../includes/dbconnect.php';
 $erro = '';
 $success = '';
 
+// pesquisa o ultimo id do id_ped e incrementa
+$result = $mysqli->query("SELECT MAX(id_ped) as ultima_ordem FROM items_pedido");
+if ($result) {
+    $row = $result->fetch_assoc();
+    if ($row['ultima_ordem'] !== null) {
+        $id_ordem_proxima = (int)$row['ultima_ordem'] + 1;
+    }
+}
+// pesquisa o ultimo id do id_ped e incrementa
+$result = $mysqli->query("SELECT MAX(id_prod) as ultima_produto FROM items_pedido");
+if ($result) {
+    $row = $result->fetch_assoc();
+    if ($row['ultima_produto'] !== null) {
+        $id_ordem_produto = (int)$row['ultima_produto'] + 1;
+    }
+}
+
+
 // Inserir/Atualizar Item de Pedido
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST["id_ped"], $_POST["id_prod"], $_POST["preco_vendido"])) {
@@ -17,8 +35,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $id_itens_ped = isset($_POST["id_itens_ped"]) ? $_POST["id_itens_ped"] : null;
 
             if ($id_itens_ped === null) { // Inserir novo item de pedido
-                $stmt = $mysqli->prepare("INSERT INTO Itens_Pedido (id_ped, id_prod, preco_vendido) VALUES (?, ?, ?)");
-                $stmt->bind_param("iis", $id_ped, $id_prod, $preco_itens_ped);
+                $stmt = $mysqli->prepare("INSERT INTO itens_Pedido (id_ped, id_prod, preco_vendido) VALUES (?, ?, ?)");
+                $stmt->bind_param("iis", $id_pedido_proxima, $id_prod, $preco_itens_ped);
 
                 if ($stmt->execute()) {
                     $success = "Item de pedido registrado com sucesso.";
@@ -57,7 +75,6 @@ if (isset($_GET["id_ped"]) && isset($_GET["id_prod"])) {
 
 // Listar Itens de Pedido
 $result = $mysqli->query("SELECT ip.*, p.nome_prod, ped.data_ped FROM items_pedido ip LEFT JOIN Produto p ON ip.id_prod = p.id_prod LEFT JOIN Pedido ped ON ip.id_ped = ped.id_ped");
-
 ?>
 
 <?php require_once 'headerCRUD.php'; ?>
@@ -78,38 +95,53 @@ $result = $mysqli->query("SELECT ip.*, p.nome_prod, ped.data_ped FROM items_pedi
         <input type="hidden" name="id_itens_ped"
             value="<?= isset($_POST['id_itens_ped']) ? $_POST['id_itens_ped'] : '' ?>">
 
-        <label for="id_ped">Pedido:</label><br>
-        <select name="id_ped" required>
-            <option value="">Selecione um pedido</option>
-            <?php
-            // Listar pedidos para o dropdown
-            $pedidos = $mysqli->query("SELECT id_ped, data_ped FROM Pedido");
-            while ($pedido = $pedidos->fetch_assoc()) {
-                $selected = (isset($_POST['id_ped']) && $_POST['id_ped'] == $pedido['id_ped']) ? 'selected' : '';
-                echo "<option value='{$pedido['id_ped']}' $selected>{$pedido['id_ped']}</option>";
-            }
-            ?>
-        </select><br><br>
+        <label for="id_ped">Codigo do Pedido</label><br>
+        <input type="text" name="id_ped"
+                value="<?php echo htmlspecialchars($id_ordem_proxima); ?>"
+                required readonly><br><br>
 
-        <label for="id_prod">Produto:</label><br>
-        <select name="id_prod" required>
-            <option value="">Selecione um produto</option>
-            <?php
-            // Listar produtos para o dropdown
-            $produtos = $mysqli->query("SELECT id_prod, nome_prod FROM Produto");
-            while ($produto = $produtos->fetch_assoc()) {
-                $selected = (isset($_POST['id_prod']) && $_POST['id_prod'] == $produto['id_prod']) ? 'selected' : '';
-                echo "<option value='{$produto['id_prod']}' $selected>{$produto['nome_prod']}</option>";
-            }
-            ?>
-        </select><br><br>
+        <label for="id_prod">Codigo do Produto</label><br>
+        <input type="text" name="id_prod"
+                value="<?php echo htmlspecialchars($id_ordem_produto); ?>"
+                required readonly><br><br>
 
         <label for="preco_itens_ped">Preço:</label><br>
-        <input type="text" name="preco_itens_ped"
+        <input id="preco_itens_ped" type="text" name="preco_itens_ped"
             value="<?= isset($_POST['preco_vendido']) ? htmlspecialchars($_POST['preco_vendido']) : '' ?>"
             required><br><br>
 
-        <button type="submit"><?= (isset($_POST['id_itens_ped'])) ? 'Salvar' : 'Cadastrar' ?></button>
+            <script>
+            document.getElementById('preco_itens_ped').addEventListener('input', function (e) {
+                // Remove qualquer caractere não numérico
+                let value = e.target.value.replace(/[^0-9]/g, '');
+
+                // Se o valor estiver vazio, não faz nada
+                if (value === '') {
+                    e.target.value = '';
+                    return;
+                }
+
+                // Define a parte decimal (centavos)
+                let decimalPart = value.slice(-2).padStart(2, '0');
+                // Define a parte inteira (reais)
+                let integerPart = value.slice(0, -2);
+
+                // Remove zeros à esquerda da parte inteira
+                integerPart = integerPart.replace(/^0+/, '') || '0'; // Se estiver vazio, torna-se '0'
+
+                // Adiciona separador de milhar
+                integerPart = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+
+                // Formata o valor final
+                let formattedValue = integerPart + ',' + decimalPart;
+
+                // Define o valor formatado no campo
+                e.target.value = 'R$ ' + formattedValue;
+            });
+
+        </script>
+
+        <button type="submit"><?= (isset($_POST['id_ped'])) ? 'Salvar' : 'Cadastrar' ?></button>
     </form>
 
     <hr>
@@ -119,8 +151,8 @@ $result = $mysqli->query("SELECT ip.*, p.nome_prod, ped.data_ped FROM items_pedi
     <table border="1">
         <thead>
             <tr>
-                <th>ID Pedido</th>
-                <th>ID Produto</th>
+                <th>Codigo Pedido</th>
+                <th>Codigo Produto</th>
                 <th>Nome do Produto</th>
                 <th>Data do Pedido</th>
                 <th>Preço</th>

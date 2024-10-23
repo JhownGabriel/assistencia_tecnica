@@ -5,6 +5,32 @@ include_once '../includes/dbconnect.php';
 $erro = '';
 $success = '';
 
+// Consulta para obter a última `id_compra`
+$result = $mysqli->query("SELECT MAX(id_compra) as ultima_compra FROM Items_compra");
+if ($result) {
+    $row = $result->fetch_assoc();
+    if ($row['ultima_compra'] !== null) {
+        $id_ordem_compra = (int)$row['ultima_compra'] + 1;
+    }
+}
+// Consulta para obter a última `id_prod`
+$result = $mysqli->query("SELECT MAX(id_prod) as ultima_prod FROM Items_compra");
+if ($result) {
+    $row = $result->fetch_assoc();
+    if ($row['ultima_prod'] !== null) {
+        $id_ordem_prod = (int)$row['ultima_prod'] + 1;
+    }
+}
+// Consulta para obter o valor da ultima compra
+$sql = $mysqli->query("SELECT preco_compra FROM Compra ORDER BY id_compra DESC LIMIT 1");
+// Verificar se o resultado contém dados
+if ($sql) {
+    // Pegar o valor da última compra
+    $row = $result->fetch_assoc();
+    if ($row && $row['preco_compra'] !== null) {
+        $ultimo_valor = (float)$row['preco_compra'];
+    }
+}
 //Inserir/Atualizar Itens de Compra
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST["id_compra"], $_POST["id_prod"], $_POST["preco_compra"])) {
@@ -78,22 +104,29 @@ $result = $mysqli->query("SELECT ic.*, p.nome_prod FROM Items_compra ic LEFT JOI
         <p style="color: green;"><?= htmlspecialchars($success) ?></p>
     <?php endif; ?>
 
+    <?php
+    // Recupera o valor de preco_compra passado pela URL
+    $preco_compra = isset($_GET['preco_compra']) ? $_GET['preco_compra'] : '';
+        
+    // Se precisar, você pode usar htmlspecialchars() para evitar problemas de segurança
+    $preco_compra = htmlspecialchars($preco_compra);
+    ?>
+
     <!-- Formulário para adicionar ou editar item de compra -->
     <form action="itens_compra.php" method="POST">
         <input type="hidden" name="id_item" value="<?= isset($_POST['id_item']) ? $_POST['id_item'] : '' ?>">
 
         <label for="id_compra">Codigo da Compra:</label><br>
         <input type="number" name="id_compra" min="1"
-            value="<?= isset($_POST['id_compra']) ? htmlspecialchars($_POST['id_compra']) : '' ?>" required><br><br>
+        value="<?php echo htmlspecialchars($id_ordem_compra); ?>" readonly required><br><br>
 
-        <label for="id_prod">Codigo do Produto:</label><br>
-        <input type="number" name="id_prod" min="1"
-            value="<?= isset($_POST['id_prod']) ? htmlspecialchars($_POST['id_prod']) : '' ?>" required><br><br>
+        <label for="nome_prod">Codigo do Produto:</label><br>
+        <input type="text" name="nome_prod"
+            value="<?php echo htmlspecialchars($id_ordem_prod); ?>" readonly required><br><br>
 
             <label for="preco_">Preço:</label><br>
-        <input type="text" id="preco" name="preco" placeholder="R$ 0,00"
-            value="<?= isset($_POST['preco']) ? htmlspecialchars($_POST['preco']) : '' ?>"
-            required><br><br>
+        <input type="text" id="preco" name="preco"
+            value="<?php echo htmlspecialchars($ultimo_valor)?>" readonly required><br><br>
 
         <script>
             document.getElementById('preco').addEventListener('input', function (e) {
@@ -125,8 +158,7 @@ $result = $mysqli->query("SELECT ic.*, p.nome_prod FROM Items_compra ic LEFT JOI
             });
 
         </script>
-
-        <button type="submit"><?= (isset($_POST['id_item'])) ? 'Salvar' : 'Cadastrar' ?></button>
+        <button type="submit"><?= (isset($_POST['id_compra'])) ? 'Salvar' : 'Cadastrar' ?></button>
     </form>
 
     <hr>
