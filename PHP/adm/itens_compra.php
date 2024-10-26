@@ -22,6 +22,9 @@ if ($result) {
     }
 }
 // Consulta para obter o valor da ultima compra
+
+$ultimo_valor = '';
+
 $sql = $mysqli->query("SELECT preco_compra FROM Compra ORDER BY id_compra DESC LIMIT 1");
 // Verificar se o resultado contém dados
 if ($sql) {
@@ -126,7 +129,7 @@ $result = $mysqli->query("SELECT ic.*, p.nome_prod FROM Items_compra ic LEFT JOI
 
             <label for="preco_">Preço:</label><br>
         <input type="text" id="preco" name="preco"
-            value="<?php echo htmlspecialchars($ultimo_valor)?>" readonly required><br><br>
+            value="<?php echo htmlspecialchars($ultimo_valor); ?>" readonly required><br><br>
 
         <script>
             document.getElementById('preco').addEventListener('input', function (e) {
