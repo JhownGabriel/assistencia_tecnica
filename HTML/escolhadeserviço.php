@@ -6,18 +6,17 @@ include_once '../PHP/includes/dbconnect.php';
     require_once 'header.php';
 ?>
     <main>
-        <div>
-            <div class="servicos">
-                <p>mecanica de microondas   
-                <img src="../images/microondasft.png" alt="microondas"></p>
-            </div>
-            <hr>
-            <div class="servicos">
-                <p>mecanica de maquina de lavar
-                <img src="../images/maquinadelavarft.png" alt="maquinadelavar"></p>
-            </div>
+    <div class="fundoserv">
+        <div class="servicos">
+            <p>Mecanica de microondas</p>
+            <img src="../images/microondasft.png" alt="microondas">
         </div>
+        <div class="servicos">
+            <p>Mecanica de maquina de lavar</p>
+            <img src="../images/maquinadelavarft.png" alt="maquinadelavar">
+        </div>
+    </div>
     </main>
-    <?php
-        require_once 'footer.php';
-    ?>
+<?php
+    require_once 'footer.php';
+?>
