@@ -27,7 +27,6 @@
 
                 if (login) {
                     login.remove();
-
                 }
                 
             }else{
@@ -56,8 +55,9 @@
 <body>
     <header>
         <nav class="navbar d-flex justify-content-between align-items-center px-3">
-            <a class="navbar-brand" href="index.php">
+            <a class="navbar-brand" href="../../index.html">
                 <img src="../images/casaicon.png" class="d-inline-block align-top" alt="">
+                <img src="../../images/logoazul.png" class="d-inline-block align-top" alt="Logo" />
             </a>
         </nav>
     </header>
@@ -72,13 +72,7 @@
             <i class="fas fa-bars"></i>
         </label>
         <ul>
-        <?php  
-            if ($nome == "NENHUM"){
-                echo '<li><a id="navbar" class="active" href="../../HTML/index.php">Home</a></li>';
-            }else{
-                echo '<li class="account" id="login"><a class="active" href="login.php" id="login-account">Olá, ' . htmlspecialchars($nome) . '</a></li>';
-            } 
-        ?>
+            <li><a id="navbar" class="active" href="../../HTML/index.php">Home</a></li>
             <li><a class="active" href="cliente.php">Cliente</a></li>
             <li><a class="active" href="compra.php">Compra</a></li>
             <li><a class="active" href="fornecedor.php">Fornecedor</a></li>

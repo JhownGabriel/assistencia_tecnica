@@ -82,7 +82,7 @@ $result = $mysqli->query("SELECT p.*, c.nome_cli, u.nome_usu FROM Pedido p LEFT 
     <?php endif; ?>
 
     <!-- Formulário para adicionar ou editar pedido -->
-    <form action="itens_pedido.php" method="POST" class="form-pedido">
+    <form action="itens_pedido.php" method="POST">
         <input type="hidden" name="id_ped" value="<?= isset($_POST['id_ped']) ? $_POST['id_ped'] : '' ?>">
 
         <label for="endereco_entrega">Endereço de Entrega:</label><br>
@@ -107,8 +107,9 @@ $result = $mysqli->query("SELECT p.*, c.nome_cli, u.nome_usu FROM Pedido p LEFT 
             ?>
         </select><br><br>
 
-        <label for="valor_total">Valor Total:</label><br>
-        <input type="text" name="valor_total" placeholder="R$ 0,00" required><br><br>
+        <label for="preco_vendido">Valor Total:</label><br>
+        <input type="text" name="valor_total"
+            value="" placeholder="R$ 0,00" required><br><br>
 
         <label for="metodo_pagamento">Método de Pagamento:</label><br>
         <select name="metodo_pagamento" required>

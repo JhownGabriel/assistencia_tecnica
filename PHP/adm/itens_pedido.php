@@ -31,11 +31,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         } else {
             $id_ped = $_POST["id_ped"];
             $id_prod = $_POST["id_prod"];
-            $preco_itens_ped = $_POST["preco_vendido"];
+            $preco_vendido = str_replace(['R$', '.', ','], ['', '', '.'],  $_POST["preco_vendido"]);
             $id_itens_ped = isset($_POST["id_itens_ped"]) ? $_POST["id_itens_ped"] : null;
 
             if ($id_itens_ped === null) { // Inserir novo item de pedido
-                $stmt = $mysqli->prepare("INSERT INTO itens_Pedido (id_ped, id_prod, preco_vendido) VALUES (?, ?, ?)");
+                $stmt = $mysqli->prepare("INSERT INTO items_pedido (id_ped, id_prod, preco_vendido) VALUES (?, ?, ?)");
                 $stmt->bind_param("iis", $id_pedido_proxima, $id_prod, $preco_itens_ped);
 
                 if ($stmt->execute()) {
@@ -64,7 +64,7 @@ if (isset($_GET["id_ped"]) && isset($_GET["id_prod"])) {
     $id_ped = (int) $_GET["id_ped"];
     $id_prod = (int) $_GET["id_prod"];
 
-    $stmt = $mysqli->prepare("DELETE FROM Itens_Pedido WHERE id_ped = ? AND id_prod = ?");
+    $stmt = $mysqli->prepare("DELETE FROM items_pedido WHERE id_ped = ? AND id_prod = ?");
     $stmt->bind_param('ii', $id_ped, $id_prod);
     if ($stmt->execute()) {
         $success = "Item de pedido removido com sucesso.";
@@ -107,7 +107,7 @@ $result = $mysqli->query("SELECT ip.*, p.nome_prod, ped.data_ped FROM items_pedi
 
         <label for="preco_itens_ped">Preço:</label><br>
         <input id="preco_itens_ped" type="text" name="preco_itens_ped"
-            value="<?= isset($_POST['preco_vendido']) ? htmlspecialchars($_POST['preco_vendido']) : '' ?>"
+            value="<?php echo htmlspecialchars($preco_vendido); ?>"
             required><br><br>
 
             <script>

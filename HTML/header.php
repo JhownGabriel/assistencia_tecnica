@@ -59,6 +59,16 @@ $nome = isset($_SESSION['nome_usu']) ? $_SESSION['nome_usu'] : 'NENHUM';  // Nom
             text-decoration: none;
             color: #FFFFFF;
         }
+        .usadosbg {
+            width: 50%;
+            margin: 10px auto 0;
+            background-color: grey;
+            box-shadow: 5px 5px 10px black;
+            padding: 10px;
+        }
+        .usadosbg th {
+            background-color: blue;
+        }
     </style>
 </head>
 
@@ -67,9 +77,6 @@ $nome = isset($_SESSION['nome_usu']) ? $_SESSION['nome_usu'] : 'NENHUM';  // Nom
         <nav class="navbar d-flex justify-content-between align-items-center px-3">
             <div class="d-flex align-items-center">
                 <img src="../images/logoazul.png" class="d-inline-block align-top" alt="Logo" />
-                <a class="navbar-brand" href="index.php">
-                    <img src="../images/casaicon.png" class="d-inline-block align-top ms-2" alt="Home" />
-                </a>
             </div>
             <div id="criar_conta" class="d-flex align-items-center">
                 <li class="btn btn-warning mb-0"><a href="login.php">Login</a></li>

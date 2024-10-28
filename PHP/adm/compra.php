@@ -154,7 +154,7 @@ $result = $mysqli->query("SELECT c.*, f.nome_for, u.nome_usu FROM Compra c LEFT 
 
     <!-- Exibição das compras -->
     <h2>Lista de Compras</h2>
-    <table border="1">
+    <table>
         <thead>
             <tr>
                 <th>ID Compra</th>

@@ -1,4 +1,5 @@
 <?php
+session_start();
 include_once '../PHP/includes/dbconnect.php';
 
 // Verifica se o ID do produto foi passado na URL

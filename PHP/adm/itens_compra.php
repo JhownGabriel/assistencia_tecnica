@@ -128,39 +128,38 @@ $result = $mysqli->query("SELECT ic.*, p.nome_prod FROM Items_compra ic LEFT JOI
             value="<?php echo htmlspecialchars($id_ordem_prod); ?>" readonly required><br><br>
 
             <label for="preco_">Preço:</label><br>
-        <input type="text" id="preco" name="preco"
-            value="<?php echo htmlspecialchars($ultimo_valor); ?>" readonly required><br><br>
+            <input type="text" id="preco_items_compra" name="preco_items_compra" placeholder="R$ 0,00" 
+            value="<?= isset($_POST['preco_items_compra']) ? htmlspecialchars($_POST['preco_items_compra']) : '' ?>" required>
 
-        <script>
-            document.getElementById('preco').addEventListener('input', function (e) {
-                // Remove qualquer caractere não numérico
-                let value = e.target.value.replace(/[^0-9]/g, '');
+            <script>
+        document.getElementById('preco_items_compra').addEventListener('input', function (e) {
+                    let value = e.target.value.replace(/\D/g, '');  // Remove qualquer caractere não numérico
 
-                // Se o valor estiver vazio, não faz nada
-                if (value === '') {
-                    e.target.value = '';
-                    return;
-                }
 
-                // Define a parte decimal (centavos)
-                let decimalPart = value.slice(-2).padStart(2, '0');
-                // Define a parte inteira (reais)
-                let integerPart = value.slice(0, -2);
+                    if (value === '') {
+                        e.target.value = '';
+                        return;
+                    }
 
-                // Remove zeros à esquerda da parte inteira
-                integerPart = integerPart.replace(/^0+/, '') || '0'; // Se estiver vazio, torna-se '0'
 
-                // Adiciona separador de milhar
-                integerPart = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+                    // Define a parte decimal (centavos)
+                    let decimalPart = value.slice(-2).padStart(2, '0');
 
-                // Formata o valor final
-                let formattedValue = integerPart + ',' + decimalPart;
+                    // Define a parte inteira (reais)
+                    let integerPart = value.slice(0, -2) || '0';
 
-                // Define o valor formatado no campo
-                e.target.value = 'R$ ' + formattedValue;
-            });
+                    // Remove zeros à esquerda da parte inteira
+                    integerPart = integerPart.replace(/^0+/, '') || '0';
 
-        </script>
+                    // Adiciona separador de milhar
+                    integerPart = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+
+                    // Formata o valor final
+                    let formattedValue = integerPart + ',' + decimalPart;
+
+                    // Define o valor formatado no campo
+                    e.target.value = 'R$ ' + formattedValue;
+                });
         <button type="submit"><?= (isset($_POST['id_compra'])) ? 'Salvar' : 'Cadastrar' ?></button>
     </form>
 

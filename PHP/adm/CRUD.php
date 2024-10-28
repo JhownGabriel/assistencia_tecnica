@@ -156,6 +156,8 @@
     </style>
 </head>
 
+<?php require_once 'headerCRUD.php'; ?>
+
 <body>
     <main>
         <h1>Área de Gerenciamento de Clientes</h1>
