@@ -62,7 +62,7 @@ main {
         /* margin-left: 290px; */
     }
     a.active,a:hover {
-        background-color:  rgb(17,50,99);
+        color: #e9ec3e;
         transition: .5s;
     }
     .checkbtn {
@@ -159,7 +159,7 @@ main {
         border-radius: 10px;
         border: 1px solid black;
         height: 720px;
-        width: 1530px;
+        width: 100dvw;
         margin: 10px auto;
     }
     #trabalho_content {

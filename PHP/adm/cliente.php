@@ -1,5 +1,5 @@
 <?php
-// include_once '../auth.php';  //verificar se esta logado
+session_start();
 include_once '../includes/dbconnect.php';
 
 $erro = '';
@@ -169,7 +169,7 @@ $result = $mysqli->query("SELECT * FROM Cliente WHERE status_cli = 'ativo'");
 
         <label for="uf">UF:</label><br>
         <select name="uf" required>
-            <option value="invalido">SELECIONE</option>
+            <option value="SP">SELECIONE</option>
             <?php
             $ufs = ['AC', 'AL', 'AP', 'AM', 'BA', 'CE', 'DF', 'ES', 'GO', 'MA', 'MT', 'MS', 'MG', 'PA', 'PB', 'PR', 'PE', 'PI', 'RJ', 'RN', 'RS', 'RO', 'RR', 'SC', 'SP', 'SE', 'TO'];
             foreach ($ufs as $uf) {
@@ -186,7 +186,7 @@ $result = $mysqli->query("SELECT * FROM Cliente WHERE status_cli = 'ativo'");
     <table border="1">
         <thead>
             <tr>
-                <th>ID</th>
+                <th>Codigo</th>
                 <th>Nome</th>
                 <th>Documento</th>
                 <th>Email</th>
@@ -201,9 +201,8 @@ $result = $mysqli->query("SELECT * FROM Cliente WHERE status_cli = 'ativo'");
                     <td><?= $row["documento_cli"] ?></td>
                     <td><?= $row["email_cli"] ?></td>
                     <td>
-                        <a href="editar_cliente.php?id_cli=<?= $row["id_cli"] ?>">Editar</a>
                         <a href="cliente.php?id_cli=<?= $row["id_cli"] ?>&del=true"
-                            onclick="return confirm('Tem certeza que deseja desabilitar este cliente?')">Desabilitar</a>
+                            onclick="return confirm('Tem certeza que deseja desabilitar este cliente?')" class="btn btn-danger btn-sm">Desabilitar</a>
                     </td>
                 </tr>
             <?php endwhile; ?>

@@ -1,5 +1,5 @@
 <?php
-
+session_start();
 include_once '../includes/dbconnect.php';
 
 $erro = '';
@@ -233,7 +233,7 @@ if (!$fornecedores) {
                     <td><?= htmlspecialchars($fornecedor['status_for']) ?></td>
                     <td>
                         <a href="fornecedor.php?id_for=<?= $fornecedor['id_for'] ?>&del=1"
-                            onclick="return confirm('Tem certeza que deseja desabilitar este fornecedor?')">Desabilitar</a>
+                            onclick="return confirm('Tem certeza que deseja desabilitar este fornecedor?')" class="btn btn-danger btn-sm">Desabilitar</a>
                     </td>
                 </tr>
             <?php endwhile; ?>

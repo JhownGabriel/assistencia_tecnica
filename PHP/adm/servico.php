@@ -1,4 +1,5 @@
 <?php
+session_start();
 include_once '../includes/dbconnect.php';
 
 $erro = '';
@@ -137,7 +138,7 @@ $result = $mysqli->query("SELECT * FROM Servico WHERE status_serv = 'ativo'"); /
     <table border="1">
         <thead>
             <tr>
-                <th>ID</th>
+                <th>Codigo</th>
                 <th>Nome</th>
                 <th>Descrição</th>
                 <th>Preço</th>
@@ -155,7 +156,7 @@ $result = $mysqli->query("SELECT * FROM Servico WHERE status_serv = 'ativo'"); /
                     <td><?= htmlspecialchars($servico['prazo_serv']) ?></td>
                     <td>
                         <a href="servico.php?id_serv=<?= $servico['id_serv'] ?>&del=1"
-                            onclick="return confirm('Tem certeza que deseja desabilitar este serviço?')">Desabilitar</a>
+                            onclick="return confirm('Tem certeza que deseja desabilitar este serviço?')" class="btn btn-danger btn-sm">Desabilitar</a>
                     </td>
                 </tr>
             <?php endwhile; ?>

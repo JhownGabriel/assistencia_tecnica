@@ -157,7 +157,7 @@ $result = $mysqli->query("SELECT c.*, f.nome_for, u.nome_usu FROM Compra c LEFT 
     <table>
         <thead>
             <tr>
-                <th>ID Compra</th>
+                <th>Codigo</th>
                 <th>Data Compra</th>
                 <th>Fornecedor</th>
                 <th>Usuário</th>
@@ -178,9 +178,8 @@ $result = $mysqli->query("SELECT c.*, f.nome_for, u.nome_usu FROM Compra c LEFT 
                     <td><?= htmlspecialchars($compra['data_entrega_efetiva']) ?></td>
                     <td><?= htmlspecialchars($compra['preco_compra']) ?></td>
                     <td>
-                        <a href="compra.php?id_compra=<?= $compra['id_compra'] ?>">Editar</a>
                         <a href="compra.php?id_compra=<?= $compra['id_compra'] ?>&delete=true"
-                            onclick="return confirm('Tem certeza que deseja remover esta compra?')">Excluir</a>
+                            onclick="return confirm('Tem certeza que deseja remover esta compra?')" class="btn btn-danger btn-sm">Excluir</a>
                     </td>
                 </tr>
             <?php endwhile; ?>

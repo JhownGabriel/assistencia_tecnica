@@ -99,7 +99,7 @@ $result = $mysqli->query("SELECT os.*, c.nome_cli, u.nome_usu FROM Ordem_servico
     <table border="1">
         <thead>
             <tr>
-                <th>ID</th>
+                <th>Codigo</th>
                 <th>Data</th>
                 <th>Cliente</th>
                 <th>Usuário</th>

@@ -36,7 +36,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             if ($id_itens_ped === null) { // Inserir novo item de pedido
                 $stmt = $mysqli->prepare("INSERT INTO items_pedido (id_ped, id_prod, preco_vendido) VALUES (?, ?, ?)");
-                $stmt->bind_param("iis", $id_pedido_proxima, $id_prod, $preco_itens_ped);
+                $stmt->bind_param("iis", $id_pedido_proxima, $id_prod, $preco_vendido);
 
                 if ($stmt->execute()) {
                     $success = "Item de pedido registrado com sucesso.";
@@ -45,7 +45,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 }
             } else { // Atualizar item de pedido existente
                 $stmt = $mysqli->prepare("UPDATE items_pedido SET preco_vendido = ? WHERE id_ped = ? AND id_prod = ?");
-                $stmt->bind_param("dii", $preco_itens_ped, $id_ped, $id_prod);
+                $stmt->bind_param("dii", $preco_vendido, $id_ped, $id_prod);
 
                 if ($stmt->execute()) {
                     $success = "Item de pedido atualizado com sucesso.";
@@ -106,7 +106,7 @@ $result = $mysqli->query("SELECT ip.*, p.nome_prod, ped.data_ped FROM items_pedi
                 required readonly><br><br>
 
         <label for="preco_itens_ped">Preço:</label><br>
-        <input id="preco_itens_ped" type="text" name="preco_itens_ped"
+        <input id="preco_itens_ped" type="text" name="preco_vendido"
             value="<?php echo htmlspecialchars($preco_vendido); ?>"
             required><br><br>
 
@@ -168,7 +168,7 @@ $result = $mysqli->query("SELECT ip.*, p.nome_prod, ped.data_ped FROM items_pedi
                     <td><?= htmlspecialchars($item['data_ped']) ?></td>
                     <td><?= htmlspecialchars($item['preco_vendido']) ?></td>
                     <td>
-                        <a href="itens_pedido.php?id_ped=<?= $item['id_ped'] ?>&id_prod=<?= $item['id_prod'] ?>"onclick="return confirm('Tem certeza que deseja remover este item de pedido?')">Remover</a>
+                        <a href="itens_pedido.php?id_ped=<?= $item['id_ped'] ?>&id_prod=<?= $item['id_prod'] ?>"onclick="return confirm('Tem certeza que deseja remover este item de pedido?')" class="btn btn-danger btn-sm">Remover</a>
                     </td>
                 </tr>
             <?php endwhile; ?>

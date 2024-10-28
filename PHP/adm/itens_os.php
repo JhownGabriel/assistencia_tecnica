@@ -168,7 +168,7 @@ $result = $mysqli->query("SELECT io.*, s.nome_serv FROM Items_os io LEFT JOIN Se
                     <td><?= htmlspecialchars($item['preco_items_os']) ?></td>
                     <td>
                     <a href="itens_os.php?id_ordem=<?= $item['id_ordem'] ?>&id_serv=<?= $item['id_serv'] ?>&del=1"
-                    onclick="return confirm('Tem certeza que deseja remover este item?')">Remover</a>
+                    onclick="return confirm('Tem certeza que deseja remover este item?')" class="btn btn-danger btn-sm">Remover</a>
                     </td>
                 </tr>
             <?php endwhile; ?>

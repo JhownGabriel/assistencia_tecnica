@@ -186,7 +186,7 @@ $result = $mysqli->query("SELECT ic.*, p.nome_prod FROM Items_compra ic LEFT JOI
                     <td><?= htmlspecialchars($item['preco_items_compra']) ?></td>
                     <td>
                         <a href="itens_compra.php?id_compra=<?= $item['id_compra'] ?>&id_prod=<?= $item['id_prod'] ?>"
-                            onclick="return confirm('Tem certeza que deseja remover este item de compra?')">Remover</a>
+                            onclick="return confirm('Tem certeza que deseja remover este item de compra?')" class="btn btn-danger btn-sm">Remover</a>
                     </td>
                 </tr>
             <?php endwhile; ?>

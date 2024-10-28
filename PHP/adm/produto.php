@@ -1,5 +1,5 @@
 <?php
-
+session_start();
 include_once '../includes/dbconnect.php';
 
 $erro = '';
@@ -62,54 +62,6 @@ $result = $mysqli->query("SELECT * FROM Produto WHERE status_prod != 'Desabilita
 
 <?php require_once 'headerCRUD.php'; ?>
 <link rel="stylesheet" href="styleCRUD/stylecrud.css" type="text/css">
-<style>
-    body {
-        font-family: Arial, sans-serif;
-    }
-
-    h1, h2 {
-        text-align: center;
-    }
-
-    .form-grid {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 10px;
-        margin: 20px 0;
-    }
-
-    .form-grid label {
-        display: block;
-        margin-bottom: 5px;
-    }
-
-    .form-grid input {
-        width: 100%;
-        padding: 5px;
-        box-sizing: border-box;
-    }
-
-    .form-grid button {
-        grid-column: span 3;
-        padding: 10px;
-    }
-
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        margin: 20px 0;
-    }
-
-    th, td {
-        border: 1px solid #ccc;
-        padding: 10px;
-        text-align: left;
-    }
-
-    th {
-        background-color: #f2f2f2;
-    }
-</style>
 <body>
     <h1>Cadastro de Produtos</h1>
 
@@ -124,36 +76,57 @@ $result = $mysqli->query("SELECT * FROM Produto WHERE status_prod != 'Desabilita
     <!-- Formulário para adicionar ou editar produto -->
     <form action="produto.php" method="POST">
         <input type="hidden" name="id_prod" value="<?= isset($_POST['id_prod']) ? $_POST['id_prod'] : -1 ?>">
+            <label for="nome_prod">Nome do Produto:</label><br>
+            <input type="text" name="nome_prod" value="<?= isset($_POST['nome_prod']) ? htmlspecialchars($_POST['nome_prod']) : '' ?>" required><br><br>
 
-        <div class="form-grid">
-            <div>
-                <label for="nome_prod">Nome do Produto:</label>
-                <input type="text" name="nome_prod" value="<?= isset($_POST['nome_prod']) ? htmlspecialchars($_POST['nome_prod']) : '' ?>" required>
-            </div>
-            <div>
-                <label for="marca">Marca:</label>
-                <input type="text" name="marca" value="<?= isset($_POST['marca']) ? htmlspecialchars($_POST['marca']) : '' ?>">
-            </div>
-            <div>
-                <label for="desc_prod">Descrição:</label>
-                <input type="text" name="desc_prod" value="<?= isset($_POST['desc_prod']) ? htmlspecialchars($_POST['desc_prod']) : '' ?>">
-            </div>
-            <div>
-                <label for="preco_venda">Preço do Produto:</label>
-                <input type="text" id="preco_venda" name="preco_venda" placeholder="R$ 0,00" value="<?= isset($_POST['preco_venda']) ? htmlspecialchars($_POST['preco_venda']) : '' ?>" required>
-            </div>
-            <div>
-                <label for="estoque_minimo">Estoque Mínimo:</label>
-                <input type="number" name="estoque_minimo" min="1" value="<?= isset($_POST['estoque_minimo']) ? htmlspecialchars($_POST['estoque_minimo']) : '' ?>" required>
-            </div>
-            <div>
-                <label for="status_prod">Status:</label>
-                <input type="text" name="status_prod" value="<?= isset($_POST['status_prod']) ? htmlspecialchars($_POST['status_prod']) : '' ?>" required>
-            </div>
-            <div>
-                <button type="submit"><?= (isset($_POST['id_prod']) && $_POST['id_prod'] != -1) ? 'Salvar' : 'Cadastrar' ?></button>
-            </div>
-        </div>
+            <label for="marca">Marca:</label><br>
+            <input type="text" name="marca" value="<?= isset($_POST['marca']) ? htmlspecialchars($_POST['marca']) : '' ?>"><br><br>
+
+            <label for="desc_prod">Descrição:</label><br>
+            <input type="text" name="desc_prod" value="<?= isset($_POST['desc_prod']) ? htmlspecialchars($_POST['desc_prod']) : '' ?>"><br><br>
+
+            <label for="preco_venda">Preço do Produto:</label><br>
+            <input type="text" id="preco_venda" name="preco_venda" placeholder="R$ 0,00" value="<?= isset($_POST['preco_venda']) ? htmlspecialchars($_POST['preco_venda']) : '' ?>" required><br><br>
+
+            
+        <script>
+            document.getElementById('preco_venda').addEventListener('input', function (e) {
+                // Remove qualquer caractere não numérico
+                let value = e.target.value.replace(/[^0-9]/g, '');
+
+                // Se o valor estiver vazio, não faz nada
+                if (value === '') {
+                    e.target.value = '';
+                    return;
+                }
+
+                // Define a parte decimal (centavos)
+                let decimalPart = value.slice(-2).padStart(2, '0');
+                // Define a parte inteira (reais)
+                let integerPart = value.slice(0, -2);
+
+                // Remove zeros à esquerda da parte inteira
+                integerPart = integerPart.replace(/^0+/, '') || '0'; // Se estiver vazio, torna-se '0'
+
+                // Adiciona separador de milhar
+                integerPart = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+
+                // Formata o valor final
+                let formattedValue = integerPart + ',' + decimalPart;
+
+                // Define o valor formatado no campo
+                e.target.value = 'R$ ' + formattedValue;
+            });
+
+        </script>
+
+            <label for="estoque_minimo">Estoque Mínimo:</label><br>
+            <input type="number" name="estoque_minimo" min="1" value="<?= isset($_POST['estoque_minimo']) ? htmlspecialchars($_POST['estoque_minimo']) : '' ?>" required><br><br>
+
+            <label for="status_prod">Status:</label><br>
+            <input type="text" name="status_prod" value="<?= isset($_POST['status_prod']) ? htmlspecialchars($_POST['status_prod']) : '' ?>" required><br><br> 
+
+            <button type="submit"><?= (isset($_POST['id_prod']) && $_POST['id_prod'] != -1) ? 'Salvar' : 'Cadastrar' ?></button>
     </form>
 
     <hr>
@@ -163,7 +136,7 @@ $result = $mysqli->query("SELECT * FROM Produto WHERE status_prod != 'Desabilita
     <table>
         <thead>
             <tr>
-                <th>ID</th>
+                <th>Codigo</th>
                 <th>Nome</th>
                 <th>Marca</th>
                 <th>Descrição</th>
@@ -184,7 +157,7 @@ $result = $mysqli->query("SELECT * FROM Produto WHERE status_prod != 'Desabilita
                     <td><?= htmlspecialchars($produto['estoque_minimo']) ?></td>
                     <td><?= htmlspecialchars($produto['status_prod']) ?></td>
                     <td>
-                        <a href="produto.php?id_prod=<?= $produto['id_prod'] ?>&del=1" onclick="return confirm('Tem certeza que deseja desabilitar este produto?')">Desabilitar</a>
+                        <a href="produto.php?id_prod=<?= $produto['id_prod'] ?>&del=1" onclick="return confirm('Tem certeza que deseja desabilitar este produto?')" class="btn btn-danger btn-sm">Desabilitar</a>
                     </td>
                 </tr>
             <?php endwhile; ?>

@@ -22,7 +22,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $id_usu = $_SESSION["id"];
             $id_ped = isset($_POST["id_ped"]) ? $_POST["id_ped"] : null;
             $valor_total = isset($_POST["valor_total"]) ? $_POST["valor_total"] : 0; // Novo campo
-            $metodo_pagamento = isset($_POST["metodo_pagamento"]) ? $_POST["metodo_pagamento"] : ''; // Novo campo
 
             if ($id_ped === null) { // Inserir novo pedido
                 $stmt = $mysqli->prepare("INSERT INTO Pedido (endereco_entrega, data_entrega_ped, id_cli, id_usu, valor_total, metodo_pagamento) VALUES (?, ?, ?, ?, ?, ?)");
@@ -108,17 +107,8 @@ $result = $mysqli->query("SELECT p.*, c.nome_cli, u.nome_usu FROM Pedido p LEFT 
         </select><br><br>
 
         <label for="preco_vendido">Valor Total:</label><br>
-        <input type="text" name="valor_total"
+        <input type="text" name="preco_vendido"
             value="" placeholder="R$ 0,00" required><br><br>
-
-        <label for="metodo_pagamento">Método de Pagamento:</label><br>
-        <select name="metodo_pagamento" required>
-            <option value="">Selecione um método</option>
-            <option value="cartao_credito">Cartão de Crédito</option>
-            <option value="cartao_debito">Cartão de Débito</option>
-            <option value="dinheiro">Dinheiro</option>
-            <option value="transferencia">Transferência</option>
-        </select><br><br>
 
         <label for="id_usu">Usuário:</label><br>
         <input name="id_usu" type="text" value="<?php echo isset($_SESSION['nome']) ? $_SESSION['nome'] : ''; ?>" disabled><br><br>
@@ -130,11 +120,10 @@ $result = $mysqli->query("SELECT p.*, c.nome_cli, u.nome_usu FROM Pedido p LEFT 
 
   <!-- Exibição dos pedidos -->
 <h2>Lista de Pedidos</h2>
-<div class="table-responsive">
-    <table class="table">
+    <table border="1">
         <thead>
             <tr>
-                <th>ID</th>
+                <th>Codigo</th>
                 <th>Data do Pedido</th>
                 <th>Endereço de Entrega</th>
                 <th>Data de Entrega</th>
@@ -165,7 +154,6 @@ $result = $mysqli->query("SELECT p.*, c.nome_cli, u.nome_usu FROM Pedido p LEFT 
             <?php endif; ?>
         </tbody>
     </table>
-</div>
 
 </body>
 </html>
